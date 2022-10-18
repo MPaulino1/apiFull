@@ -1,5 +1,6 @@
 ﻿using ApiFull.Domain.Products;
 using ApiFull.Infra.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ApiFull.Endpoints.Categories;
 

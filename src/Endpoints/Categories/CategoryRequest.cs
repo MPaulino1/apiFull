@@ -1,8 +1,3 @@
-﻿namespace ApiFull.Endpoints.Categories
-{
-    public class CategoryRequest
-    {
-        public string Name { get; set; }
-        public bool Active { get; set; }
-    }
-}
+﻿namespace ApiFull.Endpoints.Categories;
+    public record CategoryRequest(string Name, bool Active);
+  

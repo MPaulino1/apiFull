@@ -1,5 +1,6 @@
 ﻿using ApiFull.Domain.Products;
 using ApiFull.Infra.Data;
+using System.Data;
 
 namespace ApiFull.Endpoints.Categories;
 
@@ -13,7 +14,11 @@ public class CategoryPost
     {
         var category = new Category
         {
-            Name = categoryRequest.Name
+            Name = categoryRequest.Name,
+            CreatedBy = "Test",
+            CreateOn = DateTime.Now,
+            EditedBy = "Test",
+            EditedOn = DateTime.Now
         };
         context.Categories.Add(category);
         context.SaveChanges();

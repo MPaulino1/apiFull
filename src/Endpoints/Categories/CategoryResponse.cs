@@ -1,4 +1,4 @@
-﻿namespace ApiFull.Endpoints.Categories;
+﻿namespace IWantApp.Endpoints.Categories;
 
 public class CategoryResponse
 {
