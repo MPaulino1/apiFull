@@ -1,4 +1,5 @@
 ﻿using ApiFull.Domain.Products;
+using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiFull.Infra.Data;
@@ -12,7 +13,9 @@ public class ApplicationDbContext : DbContext
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-             builder.Entity<Product>()
+        builder.Ignore<Notification>();
+        
+        builder.Entity<Product>()
                 .Property(p => p.Name).IsRequired();
              builder.Entity<Product>()
                 .Property(p => p.Descripton).HasMaxLength(255);
