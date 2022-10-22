@@ -15,13 +15,15 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-        builder.Ignore<Notification>();
+            base.OnModelCreating(builder);
+
+            builder.Ignore<Notification>();
         
-        builder.Entity<Product>()
+            builder.Entity<Product>()
                 .Property(p => p.Name).IsRequired();
-             builder.Entity<Product>()
+            builder.Entity<Product>()
                 .Property(p => p.Descripton).HasMaxLength(255);
-             builder.Entity<Category>()
+            builder.Entity<Category>()
                 .Property(c => c.Name).IsRequired();
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configuration)
