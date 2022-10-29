@@ -1,27 +1,35 @@
-﻿using ApiFull.Domain.Products;
-using ApiFull.Infra.Data;
-using System.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
-namespace ApiFull.Endpoints.Categories;
+namespace ApiFull.Endpoints.Employees;
 
 public class EmployeePost
 {
-    public static string Template => "/categories";
+    public static string Template => "/employees";
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(CategoryRequest categoryRequest, ApplicationDbContext context)
+    public static IResult Action(EmployeeRequest employeeRequest, UserManager<IdentityUser> userManager) 
+        //UserManager - usado para salvar o usuário no lugar o DB Context
     {
-        var category = new Category(categoryRequest.Name, "Test", "Test");
- 
-        if (!category.IsValid)
+        var user = new IdentityUser { UserName = employeeRequest.Email, Email = employeeRequest.Email };
+        var result = userManager.CreateAsync(user, employeeRequest.Password).Result; //Aguarda a criação do usuário
+
+        if (!result.Succeeded)
+            return Results.ValidationProblem(result.Errors.ConvertToProblemDetails());
+
+        var userClaims = new List<Claim>
         {
-            return Results.ValidationProblem(category.Notifications.ConvertToProblemDetails());
-        }
+            new Claim("EmployeeCode", employeeRequest.EmployeeCode),
+            new Claim("Name", employeeRequest.Name)
+        };
 
-        context.Categories.Add(category);
-        context.SaveChanges();
+        var claimResult =
+        userManager.AddClaimsAsync(user, userClaims).Result;
 
-        return Results.Created($"/categories/{category.Id}", category.Id);
+        if(!claimResult.Succeeded)
+            return Results.BadRequest(claimResult.Errors.First());
+
+        return Results.Created($"/employees/{user.Id}", user.Id);
     }
 }
