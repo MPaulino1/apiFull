@@ -21,8 +21,8 @@ public class QueryAllUsersWithClaimName
                 from AspNetUsers u inner
                 join AspNetUserClaims c
                 on u.id = c.UserId and claimtype = 'Name'
-                order bt name
-                OFFSET (@page -1) * @rows ROWS FETCH NEXT @rows ROWS ONLY";
+              order by name
+              OFFSET (@page -1) * @rows ROWS FETCH NEXT @rows ROWS ONLY";
        return db.Query<EmployeeResponse>( 
             query,
             new { page, rows }
