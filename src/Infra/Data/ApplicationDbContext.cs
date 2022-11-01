@@ -25,10 +25,10 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 .Property(p => p.Descripton).HasMaxLength(255);
             builder.Entity<Category>()
                 .Property(c => c.Name).IsRequired();
-    }
-    protected override void ConfigureConventions(ModelConfigurationBuilder configuration)
-    {
-        configuration.Properties<string>()
-            .HaveMaxLength(100);
-    }
+        }
+        protected override void ConfigureConventions(ModelConfigurationBuilder configuration)
+        { 
+             configuration.Properties<string>()
+                .HaveMaxLength(100);
+        } //criando uma convenção
 }
