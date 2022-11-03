@@ -1,3 +1,3 @@
-﻿namespace ApiFull.Endpoints.Security
-{
-    public record LoginRequest(string Email, string Password);
+﻿namespace ApiFull.Endpoints.Security;
+
+public record LoginRequest(string Email, string Password);
