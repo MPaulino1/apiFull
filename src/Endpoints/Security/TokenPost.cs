@@ -14,15 +14,19 @@ public class TokenPost
     public static Delegate Handle => Action;
 
     [AllowAnonymous] //permite qualquer usuário usar o endpoint
-    public static IResult Action(LoginRequest loginRequest, IConfiguration configuration, UserManager<IdentityUser> userManager) 
+    public static IResult Action(
+        LoginRequest loginRequest, IConfiguration configuration, UserManager<IdentityUser> userManager, ILogger<TokenPost> log) 
     {
+        //add log
+        log.LogInformation("Getting Token");
+
        var user = userManager.FindByEmailAsync(loginRequest.Email).Result;
         if (user == null)
             Results.BadRequest();
         if(!userManager.CheckPasswordAsync(user, loginRequest.Password).Result) 
             Results.BadRequest();
 
-        //adicionando claims no token
+        //add claims no token
         var claims = userManager.GetClaimsAsync(user).Result;
         var subject = new ClaimsIdentity(new Claim[]
         {
