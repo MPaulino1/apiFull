@@ -11,7 +11,8 @@ public class EmployeePost
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static async Task <IResult> Action(EmployeeRequest employeeRequest, HttpContext http, UserManager<IdentityUser> userManager) 
+    public static async Task <IResult> Action(
+        EmployeeRequest employeeRequest, HttpContext http, UserManager<IdentityUser> userManager) 
     {
         var userId = http.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var user = new IdentityUser { UserName = employeeRequest.Email, Email = employeeRequest.Email };
