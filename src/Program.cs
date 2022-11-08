@@ -1,6 +1,7 @@
 using ApiFull.Endpoints.Categories;
 using ApiFull.Endpoints.Clients;
 using ApiFull.Endpoints.Employees;
+using ApiFull.Endpoints.Orders;
 using ApiFull.Endpoints.Products;
 using ApiFull.Endpoints.Security;
 using ApiFull.Infra.Data;
@@ -24,17 +25,19 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequiredLength = 3;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
-//configs token
+
 builder.Services.AddAuthorization(options =>
-{   //criando politica de segurança default
+{   
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
       .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
       .RequireAuthenticatedUser()
       .Build();
     options.AddPolicy("EmployeePolicy", p =>
         p.RequireAuthenticatedUser().RequireClaim("EmployeeCode"));
+    options.AddPolicy("CpfPolicy", p =>
+        p.RequireAuthenticatedUser().RequireClaim("Cpf"));
 });
- //recipe
+ 
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -55,14 +58,14 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddScoped<QueryAllUsersWithClaimName>(); //usando classe como serviço
+builder.Services.AddScoped<QueryAllUsersWithClaimName>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-app.UseAuthentication(); //token
-app.UseAuthorization(); //token
+app.UseAuthentication(); 
+app.UseAuthorization(); 
 
 if (app.Environment.IsDevelopment())
 {
@@ -82,9 +85,11 @@ app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
 app.MapMethods(ProductGetAll.Template, ProductGetAll.Methods, ProductGetAll.Handle);
 app.MapMethods(ProductGetShowcase.Template, ProductGetShowcase.Methods, ProductGetShowcase.Handle);
 app.MapMethods(ClientPost.Template, ClientPost.Methods, ClientPost.Handle);
+app.MapMethods(ClientGet.Template, ClientGet.Methods, ClientGet.Handle);
+app.MapMethods(OrderPost.Template, OrderPost.Methods, OrderPost.Handle);
 
 
-//filter Error
+
 app.UseExceptionHandler("/error");
 app.Map("/error", (HttpContext http) => {
 

@@ -1,4 +1,5 @@
-﻿using Flunt.Validations;
+﻿using ApiFull.Domain.Orders;
+using Flunt.Validations;
 
 namespace ApiFull.Domain.Products;
 
@@ -11,6 +12,7 @@ public class Product : Entity
     public bool HasStock { get; private set; }
     public bool Active { get; private set; } = true;
     public decimal Price { get; private set; }
+    public ICollection <Order> Orders { get; private set; }
 
     private Product() { }
 
@@ -42,5 +44,4 @@ public class Product : Entity
             .IsNotNullOrEmpty(EditedBy, "EditedBy");
         AddNotifications(contract);
     }
-};
-   
+}   
